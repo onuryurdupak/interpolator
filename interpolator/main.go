@@ -39,6 +39,12 @@ func main() {
 	replaces := map[string]string{}
 
 	for i := 1; i < len(args); i++ {
+
+		/* Escape regex groupping characters .*/
+		args[i] = strings.Replace(args[i], `$`, `\$`, -1)
+		args[i] = strings.Replace(args[i], `{`, `\{`, -1)
+		args[i] = strings.Replace(args[i], `}`, `\}`, -1)
+
 		split := strings.Split(args[i], "=")
 
 		if len(split) != 2 {
@@ -81,6 +87,16 @@ func main() {
 	}
 
 	for k, v := range replaces {
+
+		/* Unescape regex groupping characters .*/
+		k = strings.Replace(k, `\$`, `$`, -1)
+		k = strings.Replace(k, `\{`, `{`, -1)
+		k = strings.Replace(k, `\}`, `}`, -1)
+
+		v = strings.Replace(v, `\$`, `$`, -1)
+		v = strings.Replace(v, `\{`, `{`, -1)
+		v = strings.Replace(v, `\}`, `}`, -1)
+
 		fileContentStr = strings.Replace(fileContentStr, k, v, -1)
 	}
 
