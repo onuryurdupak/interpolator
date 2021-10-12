@@ -6,6 +6,8 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 func main() {
@@ -17,7 +19,6 @@ func main() {
 	}
 
 	_, err := os.Stat(args[0])
-
 	if err != nil {
 		fmt.Printf("Error checking file at: '%s' error: '%s'.\n", args[0], err.Error())
 		os.Exit(2)
@@ -53,7 +54,6 @@ func main() {
 		}
 
 		_, ok := replaces[split[0]]
-
 		if ok {
 			fmt.Printf("Key: '%s' is defined multiple times in arguments.\n", split[0])
 			os.Exit(5)
@@ -100,17 +100,44 @@ func main() {
 		fileContentStr = strings.Replace(fileContentStr, k, v, -1)
 	}
 
-	err = os.Remove(args[0])
+	const maxTries = 10
+	currentTries := maxTries
+	tempFilename := ""
 
+	for {
+		if currentTries == 0 {
+			fmt.Printf("Could not create a unique temp file name after %d tries.\n", maxTries)
+			os.Exit(8)
+		}
+
+		guid := uuid.New().String()
+		tempFilename = fmt.Sprintf("%s_%s", args[0], guid)
+
+		_, err := os.Stat(tempFilename)
+		if err != nil {
+			if os.IsNotExist(err) {
+				break
+			}
+		}
+
+		currentTries--
+	}
+
+	err = ioutil.WriteFile(tempFilename, []byte(fileContentStr), 0644)
+	if err != nil {
+		fmt.Printf("Error writing file at: '%s' error: '%s.\n", args[0], err.Error())
+		os.Exit(9)
+	}
+
+	err = os.Remove(args[0])
 	if err != nil {
 		fmt.Printf("Error clearing file at: '%s' error: '%s.\n", args[0], err.Error())
 		os.Exit(10)
 	}
 
-	err = ioutil.WriteFile(args[0], []byte(fileContentStr), 0644)
-
+	err = os.Rename(tempFilename, args[0])
 	if err != nil {
-		fmt.Printf("Error writing file at: '%s' error: '%s.\n", args[0], err.Error())
+		fmt.Printf("Could not restore original file name: '%s.\n", err.Error())
 		os.Exit(11)
 	}
 
