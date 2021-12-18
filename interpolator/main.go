@@ -12,7 +12,6 @@ import (
 
 func main() {
 	args := os.Args[1:]
-
 	if len(args) < 2 {
 		fmt.Println("Define a file path and at least one key=value pair.")
 		os.Exit(1)
@@ -40,7 +39,6 @@ func main() {
 	replaces := map[string]string{}
 
 	for i := 1; i < len(args); i++ {
-
 		/* Escape regex groupping characters .*/
 		args[i] = strings.Replace(args[i], `$`, `\$`, -1)
 		args[i] = strings.Replace(args[i], `{`, `\{`, -1)
@@ -87,7 +85,6 @@ func main() {
 	}
 
 	for k, v := range replaces {
-
 		/* Unescape regex groupping characters .*/
 		k = strings.Replace(k, `\$`, `$`, -1)
 		k = strings.Replace(k, `\{`, `{`, -1)
