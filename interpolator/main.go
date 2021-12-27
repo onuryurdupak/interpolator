@@ -39,11 +39,6 @@ func main() {
 	replaces := map[string]string{}
 
 	for i := 1; i < len(args); i++ {
-		/* Escape regex groupping characters .*/
-		args[i] = strings.Replace(args[i], `$`, `\$`, -1)
-		args[i] = strings.Replace(args[i], `{`, `\{`, -1)
-		args[i] = strings.Replace(args[i], `}`, `\}`, -1)
-
 		split := strings.Split(args[i], "=")
 
 		if len(split) != 2 {
@@ -70,7 +65,10 @@ func main() {
 			os.Exit(7)
 		}
 
-		matches := regKeyMatch.FindAllStringIndex(fileContentStr, -1)
+		matches := regKeyMatch.FindAllString(fileContentStr, -1)
+		for _, v := range matches {
+			fmt.Println(v)
+		}
 
 		if len(matches) == 0 {
 			fmt.Printf("Key: '%s' not found in file.\n", split[0])
@@ -81,19 +79,10 @@ func main() {
 			os.Exit(9)
 		}
 
-		replaces[split[0]] = split[1]
+		replaces[matches[0]] = split[1]
 	}
 
 	for k, v := range replaces {
-		/* Unescape regex groupping characters .*/
-		k = strings.Replace(k, `\$`, `$`, -1)
-		k = strings.Replace(k, `\{`, `{`, -1)
-		k = strings.Replace(k, `\}`, `}`, -1)
-
-		v = strings.Replace(v, `\$`, `$`, -1)
-		v = strings.Replace(v, `\{`, `{`, -1)
-		v = strings.Replace(v, `\}`, `}`, -1)
-
 		fileContentStr = strings.Replace(fileContentStr, k, v, -1)
 	}
 
