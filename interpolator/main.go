@@ -11,6 +11,9 @@ import (
 )
 
 const (
+	stamp_build_date  = "${build_date}"
+	stamp_commit_hash = "${commit_hash}"
+
 	errInput    = 1
 	errInternal = 2
 	errUnkown   = 3
@@ -18,8 +21,13 @@ const (
 
 func main() {
 	args := os.Args[1:]
-	if len(args) < 2 {
-		fmt.Println("Define a file path and at least one key=value pair.")
+	if len(args) == 1 && (args[0] == "version" || args[0] == "--version") {
+		fmt.Printf("Build Date: %s | Commit: %s\n", stamp_build_date, stamp_commit_hash)
+		os.Exit(0)
+	}
+
+	if len(args) < 3 {
+		fmt.Println("Define a file path, a seperator and at least one key=value pair.")
 		os.Exit(errInput)
 	}
 
@@ -35,17 +43,17 @@ func main() {
 	}
 
 	fileContent, err := ioutil.ReadFile(args[0])
-	fileContentStr := string(fileContent)
-
 	if err != nil {
 		fmt.Printf("Error reading file at: '%s' error: '%s'.\n", args[0], err.Error())
 		os.Exit(errUnkown)
 	}
+	fileContentStr := string(fileContent)
+	separator := args[1]
 
-	replaces := map[string]string{}
+	replaces := make(map[string]string, len(args)-3)
 
-	for i := 1; i < len(args); i++ {
-		split := strings.Split(args[i], "=")
+	for i := 2; i < len(args); i++ {
+		split := strings.Split(args[i], separator)
 
 		if len(split) != 2 {
 			fmt.Printf("Invalid key=value assignment: '%s'.\n", args[i])
@@ -66,8 +74,7 @@ func main() {
 		regKeyMatch, err := regexp.Compile(split[0])
 
 		if err != nil {
-			fmt.Printf("Key '%s' is not regex compliant. Error: '%s'.\n",
-				split[0], err.Error())
+			fmt.Printf("Key '%s' is not regex compliant. Error: '%s'.\n", split[0], err.Error())
 			os.Exit(errInput)
 		}
 
@@ -76,8 +83,7 @@ func main() {
 			fmt.Printf("Key: '%s' not found in file.\n", split[0])
 			os.Exit(errInput)
 		} else if len(matches) > 1 {
-			fmt.Printf("Key: '%s' is defined %v times in the file: '%s'.\n",
-				split[0], len(matches), args[0])
+			fmt.Printf("Key: '%s' is defined %v times in the file: '%s'.\n", split[0], len(matches), args[0])
 			os.Exit(errInput)
 		}
 
@@ -128,6 +134,4 @@ func main() {
 		fmt.Printf("Could not restore original file name: '%s.\n", err.Error())
 		os.Exit(errInternal)
 	}
-
-	fmt.Println("Success.")
 }
