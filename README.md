@@ -8,40 +8,16 @@ interpolator is a template processor. It can be used for editing text files by p
 
 Running the following command line statement:
 
-`interpolator a.json \"\${a}\"=123.45 \"\${b}\"=\"new_B\" false=true`
+`interpolator ./main.go ':=' 'stamp_build_date\s+=\s+"\${build_date}":=stamp_build_date = '\"$DATE\"`
 
-for `a.json` file with following content:
-
-```
-{
-  "fieldA": "${a}",
-  "fieldB": "${b}",
-  "c": {
-     "fieldOfC": false
-  }
-}
-```
-
-will convert it to:
-
-```
-{
-  "fieldA": 123.45,
-  "fieldB": "new_B",
-  "c": {
-     "fieldOfC": true
-  }
-}
-```
+for `main.go` file in the repository will replace the given pattern `stamp_build_date\s+=\s+"\${build_date}"` using seperator `:=` and convert the pattern in file to `stamp_build_date = '\"$DATE\"`
 
 
 **Breakdown:**
 
 - First command line argument is the path of the file to change.
-- Every following argument must be a key=value definition like in the example.
-- Backslash character `\` can be used to escape special shell characters such as single quotes, double quotes and dollar signs.
-- Each key definition must exist in a document exactly one time.
-
+- Second argument is the user defined key=value seperator. 
+- Each key definition (including regex in given example( must exist in a document exactly one time.
 
 **Use case:**
 
