@@ -14,6 +14,7 @@ const (
 	stamp_build_date  = "${build_date}"
 	stamp_commit_hash = "${commit_hash}"
 
+	errSuccess  = 0
 	errInput    = 1
 	errInternal = 2
 	errUnkown   = 3
@@ -23,7 +24,7 @@ func main() {
 	args := os.Args[1:]
 	if len(args) == 1 && (args[0] == "version" || args[0] == "--version") {
 		fmt.Printf("Build Date: %s | Commit: %s\n", stamp_build_date, stamp_commit_hash)
-		os.Exit(0)
+		os.Exit(errSuccess)
 	}
 
 	if len(args) < 3 {
