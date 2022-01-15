@@ -1,8 +1,8 @@
-## DESCRIPTION:
+**DESCRIPTION:**
 
 Interpolator is a regex compliant template processor. It can be used for editing text files via key value pairs.
 
-## USAGE:
+**USAGE:**
 
 Assuming interpolator (or interpolator.exe) binary is globally accessible from your terminal, running:
 
@@ -20,7 +20,7 @@ will:
 
 4-) Argument -r represents "recursive" mode. Without it, interpolator will produce an error message when a key is defined multiple times in the file.
 
-**Another example, running:**
+Another example, running:
 
 ```
 interpolator ./embed/data.go ':=' 'Stamp_build_date\s+=\s+"\${build_date}":=Stamp_build_date = '\"$DATE\"
