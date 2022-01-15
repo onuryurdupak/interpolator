@@ -1,8 +1,8 @@
-## DESCRIPTION:
+## DESCRIPTION:
 
 Interpolator is a regex compliant template processor. It can be used for editing text files via key value pairs.
 
-## USAGE:
+## USAGE:
 
 Assuming interpolator (or interpolator.exe) binary is globally accessible from your terminal, running:
 
