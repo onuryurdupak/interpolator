@@ -1,13 +1,15 @@
-**DESCRIPTION:**
+# Interpolator
+
+#### DESCRIPTION:
 
 Interpolator is a regex compliant template processor. It can be used for editing text files via key value pairs.
 
-**USAGE:**
+#### USAGE:
 
 Assuming interpolator (or interpolator.exe) binary is globally accessible from your terminal, running:
 
 ```
-interpolator -r somefile.txt '=' abcd=1234 xyz=abc
+interpolator -r somefile.txt '=' abcd=1234 xyz=abc  
 ```
 
 will:
@@ -23,7 +25,7 @@ will:
 Another example, running:
 
 ```
-interpolator ./embed/data.go ':=' 'Stamp_build_date\s+=\s+"\${build_date}":=Stamp_build_date = '\"$DATE\"
+interpolator ./embed/data.go ':=' 'Stamp_build_date\s+=\s+"\${build_date}":=Stamp_build_date = '\"$DATE\"  
 ```
 
 (for /embded/data.go file in the repository) will:
