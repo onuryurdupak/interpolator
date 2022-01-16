@@ -7,7 +7,7 @@ const (
 	ErrSuccess  = 0
 	ErrInput    = 1
 	ErrInternal = 2
-	ErrUnkown   = 3
+	ErrUnknown  = 3
 
 	HelpPrompt = `Run 'interpolator -h' for help.`
 

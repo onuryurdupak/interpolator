@@ -46,7 +46,7 @@ func main() {
 	_, err := os.Stat(args[0])
 	if err != nil {
 		fmt.Printf("Error checking file at: '%s' error: '%s'.\n", args[0], err.Error())
-		os.Exit(embed.ErrUnkown)
+		os.Exit(embed.ErrUnknown)
 	}
 
 	if os.IsNotExist(err) {
@@ -57,7 +57,7 @@ func main() {
 	fileContent, err := ioutil.ReadFile(args[0])
 	if err != nil {
 		fmt.Printf("Error reading file at: '%s' error: '%s'.\n", args[0], err.Error())
-		os.Exit(embed.ErrUnkown)
+		os.Exit(embed.ErrUnknown)
 	}
 	fileContentStr := string(fileContent)
 	separator := args[1]
