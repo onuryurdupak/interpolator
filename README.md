@@ -14,7 +14,7 @@ will:
 
 1-) Read the contents of somefile.txt,
 
-2-) Use equal sign '=' as seperator and find every instance of 'abcd' and replace them with '1234',
+2-) Use equal sign '=' as separator and find every instance of 'abcd' and replace them with '1234',
 
 3-) Then it will find every instance of 'xyz' and replace them with 'abc',
 

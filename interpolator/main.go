@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"interpolator/embed"
 	"interpolator/utils/slice_utils"
+	"interpolator/utils/stdout_utils"
 	"interpolator/utils/syntax_utils"
 	"io/ioutil"
 	"os"
@@ -22,7 +23,10 @@ func main() {
 			os.Exit(embed.ErrSuccess)
 			return
 		case args[0] == "help" || args[0] == "--help" || args[0] == "-h":
-			fmt.Printf("%s\n", embed.HelpMessage)
+			fmt.Printf("%s\n", stdout_utils.ProcessStyle(embed.HelpMessage))
+			os.Exit(embed.ErrSuccess)
+		case args[0] == "-hr":
+			fmt.Printf("%s\n", stdout_utils.RemoveStyle(embed.HelpMessage))
 			os.Exit(embed.ErrSuccess)
 		default:
 			fmt.Println(embed.HelpPrompt)
@@ -34,7 +38,7 @@ func main() {
 	replaceCount := syntax_utils.ConditionalInt(recursiveMode, -1, 1)
 
 	if len(args) < 3 {
-		fmt.Println("Define a file path, a seperator and at least one key=value pair.")
+		fmt.Println("Define a file path, a separator and at least one key=value pair.")
 		fmt.Println(embed.HelpPrompt)
 		os.Exit(embed.ErrInput)
 	}
