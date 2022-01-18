@@ -20,7 +20,7 @@ Interpolator is a regex compliant template processor. It can be used for editing
 <b><u><yellow>USAGE</yellow></u></b>
 Assuming interpolator (or interpolator.exe) binary is globally accessible from your terminal, running:
 
-<cyan><b>interpolator -r somefile.txt '=' abcd=1234 xyz=abc</b></cyan>
+<green>interpolator -r somefile.txt '=' abcd=1234 xyz=abc</green>
 
 will:
 
@@ -31,7 +31,7 @@ will:
 
 Another example, running:
 
-<cyan><b>interpolator ./embed/data.go ':=' 'Stamp_build_date\s+=\s+"\${build_date}":=Stamp_build_date = '\"$DATE\"</b></cyan>
+<green>interpolator ./embed/data.go ':=' 'Stamp_build_date\s+=\s+"\${build_date}":=Stamp_build_date = '\"$DATE\"</green>
 
 (for /embed/data.go file in the repository) will:
 

@@ -32,7 +32,7 @@ interpolator ./embed/data.go ':=' 'Stamp_build_date\s+=\s+"\${build_date}":=Stam
 
 1-) Read the contents of ./embed/data.go,
 
-2-) Use ':=' as seperator and find every instance of 'Stamp_build_date\s+=\s+"\${build_date}' regex statement,
+2-) Use ':=' as separator and find every instance of 'Stamp_build_date\s+=\s+"\${build_date}' regex statement,
 
 3-) Since -r argument is not given and regex statement will match only a single instance in the file, it will change the matching content to 'Stamp_build_date = '\"$DATE\"'.
 
