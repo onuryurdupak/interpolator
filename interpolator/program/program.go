@@ -2,7 +2,6 @@ package program
 
 import (
 	"fmt"
-	"interpolator/embed"
 	"interpolator/utils/slice_utils"
 	"interpolator/utils/stdout_utils"
 	"interpolator/utils/syntax_utils"
@@ -18,22 +17,22 @@ func Main(args []string) {
 	if len(args) == 1 {
 		switch {
 		case args[0] == "version" || args[0] == "--version" || args[0] == "-v":
-			fmt.Printf("Build Date: %s | Commit: %s\n", embed.Stamp_build_date, embed.Stamp_commit_hash)
-			os.Exit(embed.ErrSuccess)
+			fmt.Printf("Build Date: %s | Commit: %s\n", Stamp_build_date, Stamp_commit_hash)
+			os.Exit(ErrSuccess)
 			return
 		case args[0] == "help" || args[0] == "--help" || args[0] == "-h":
-			msg, err := stdout_utils.ProcessStyle(embed.HelpMessage)
+			msg, err := stdout_utils.ProcessStyle(HelpMessage)
 			if err != nil {
-				os.Exit(embed.ErrInternal)
+				os.Exit(ErrInternal)
 			}
 			fmt.Printf("%s\n", msg)
-			os.Exit(embed.ErrSuccess)
+			os.Exit(ErrSuccess)
 		case args[0] == "-hr":
-			fmt.Printf("%s\n", stdout_utils.RemoveStyle(embed.HelpMessage))
-			os.Exit(embed.ErrSuccess)
+			fmt.Printf("%s\n", stdout_utils.RemoveStyle(HelpMessage))
+			os.Exit(ErrSuccess)
 		default:
-			fmt.Println(embed.HelpPrompt)
-			os.Exit(embed.ErrInput)
+			fmt.Println(HelpPrompt)
+			os.Exit(ErrInput)
 		}
 	}
 
@@ -42,25 +41,25 @@ func Main(args []string) {
 
 	if len(args) < 3 {
 		fmt.Println("Define a file path, a separator and at least one key=value pair.")
-		fmt.Println(embed.HelpPrompt)
-		os.Exit(embed.ErrInput)
+		fmt.Println(HelpPrompt)
+		os.Exit(ErrInput)
 	}
 
 	_, err := os.Stat(args[0])
 	if err != nil {
 		fmt.Printf("Error checking file at: '%s' error: '%s'.\n", args[0], err.Error())
-		os.Exit(embed.ErrUnknown)
+		os.Exit(ErrUnknown)
 	}
 
 	if os.IsNotExist(err) {
 		fmt.Printf("File does not exist: '%s'.\n", args[0])
-		os.Exit(embed.ErrInput)
+		os.Exit(ErrInput)
 	}
 
 	fileContent, err := ioutil.ReadFile(args[0])
 	if err != nil {
 		fmt.Printf("Error reading file at: '%s' error: '%s'.\n", args[0], err.Error())
-		os.Exit(embed.ErrUnknown)
+		os.Exit(ErrUnknown)
 	}
 	fileContentStr := string(fileContent)
 	separator := args[1]
@@ -72,34 +71,34 @@ func Main(args []string) {
 
 		if len(split) != 2 {
 			fmt.Printf("Invalid key=value assignment: '%s'.\n", args[i])
-			os.Exit(embed.ErrInput)
+			os.Exit(ErrInput)
 		}
 
 		_, ok := replaces[split[0]]
 		if ok {
 			fmt.Printf("Key: '%s' is defined multiple times in arguments.\n", split[0])
-			os.Exit(embed.ErrInput)
+			os.Exit(ErrInput)
 		}
 
 		if split[0] == "" {
 			fmt.Printf("A key can not be an empty string.\n")
-			os.Exit(embed.ErrInput)
+			os.Exit(ErrInput)
 		}
 
 		regKeyMatch, err := regexp.Compile(split[0])
 
 		if err != nil {
 			fmt.Printf("Key '%s' is not regex compliant. Error: '%s'.\n", split[0], err.Error())
-			os.Exit(embed.ErrInput)
+			os.Exit(ErrInput)
 		}
 
 		matches := regKeyMatch.FindAllString(fileContentStr, -1)
 		if len(matches) == 0 {
 			fmt.Printf("Key: '%s' not found in file.\n", split[0])
-			os.Exit(embed.ErrInput)
+			os.Exit(ErrInput)
 		} else if len(matches) > 1 && !recursiveMode {
 			fmt.Printf("Key: '%s' is defined %v times in the file: '%s'.\nRun with -r for recursive mode.\n", split[0], len(matches), args[0])
-			os.Exit(embed.ErrInput)
+			os.Exit(ErrInput)
 		}
 
 		replaces[matches[0]] = split[1]
@@ -116,7 +115,7 @@ func Main(args []string) {
 	for {
 		if currentTries == 0 {
 			fmt.Printf("Could not create a unique temp file name after %d tries.\n", maxTries)
-			os.Exit(embed.ErrInternal)
+			os.Exit(ErrInternal)
 		}
 
 		guid := uuid.New().String()
@@ -135,18 +134,18 @@ func Main(args []string) {
 	err = ioutil.WriteFile(tempFilename, []byte(fileContentStr), 0644)
 	if err != nil {
 		fmt.Printf("Error writing file at: '%s' error: '%s.\n", args[0], err.Error())
-		os.Exit(embed.ErrInternal)
+		os.Exit(ErrInternal)
 	}
 
 	err = os.Remove(args[0])
 	if err != nil {
 		fmt.Printf("Error clearing file at: '%s' error: '%s.\n", args[0], err.Error())
-		os.Exit(embed.ErrInternal)
+		os.Exit(ErrInternal)
 	}
 
 	err = os.Rename(tempFilename, args[0])
 	if err != nil {
 		fmt.Printf("Could not restore original file name: '%s.\n", err.Error())
-		os.Exit(embed.ErrInternal)
+		os.Exit(ErrInternal)
 	}
 }
