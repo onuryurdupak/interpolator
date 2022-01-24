@@ -1,5 +1,7 @@
 #!/bin/bash
 
+APP_FOLDER="interpolator"
+
 git diff --quiet HEAD
 code=$?
 
@@ -15,7 +17,7 @@ SOURCE=$(git remote get-url origin)
 
 # Get interpolator from https://github.com/onuryurdupak/interpolator
 # shellcheck disable=SC2016
-interpolator "$REPO_ROOT/interpolator/program/embed.go" ':=' 'stamp_build_date\s+=\s+"\${build_date}":=stamp_build_date = '\""$DATE"\"
+interpolator "$REPO_ROOT/$APP_FOLDER/program/embed.go" ':=' 'stamp_build_date\s+=\s+"\${build_date}":=stamp_build_date = '\""$DATE"\"
 code=$?
 if [ "$code" != "0" ]; then
     echo "Error: Attempt to run interpolator exited with code: $code."
@@ -23,7 +25,7 @@ if [ "$code" != "0" ]; then
 fi
 
 # shellcheck disable=SC2016
-interpolator "$REPO_ROOT/interpolator/program/embed.go" ':=' 'stamp_commit_hash\s+=\s+"\${commit_hash}":=stamp_commit_hash = '\""$COMMIT_HASH"\"
+interpolator "$REPO_ROOT/$APP_FOLDER/program/embed.go" ':=' 'stamp_commit_hash\s+=\s+"\${commit_hash}":=stamp_commit_hash = '\""$COMMIT_HASH"\"
 code=$?
 if [ "$code" != "0" ]; then
     echo "Error: Attempt to run interpolator exited with code: $code."
@@ -31,7 +33,7 @@ if [ "$code" != "0" ]; then
 fi
 
 # shellcheck disable=SC2016
-interpolator "$REPO_ROOT/interpolator/program/embed.go" ':=' 'stamp_source\s+=\s+"\${source}":=stamp_source = '\""$SOURCE"\"
+interpolator "$REPO_ROOT/$APP_FOLDER/program/embed.go" ':=' 'stamp_source\s+=\s+"\${source}":=stamp_source = '\""$SOURCE"\"
 code=$?
 if [ "$code" != "0" ]; then
     echo "Error: Attempt to run interpolator exited with code: $code."
