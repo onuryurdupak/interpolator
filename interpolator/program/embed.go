@@ -1,18 +1,28 @@
 package program
 
+import (
+	"fmt"
+	"interpolator/utils/stdout_utils"
+)
+
 const (
-	Stamp_build_date  = "${build_date}"
-	Stamp_commit_hash = "${commit_hash}"
+	stamp_build_date  = "${build_date}"
+	stamp_commit_hash = "${commit_hash}"
+	stamp_source      = "${source}"
 
 	ErrSuccess  = 0
 	ErrInput    = 1
 	ErrInternal = 2
 	ErrUnknown  = 3
 
-	HelpPrompt = `Run 'interpolator -h' for help.`
+	helpPrompt = `Run 'interpolator -h' for help.`
 
-	HelpMessage = `
+	helpMessage = `
 If your terminal does not render styles properly, run 'interpolator -hr' to view in style-free mode.
+
+<b><u><yellow>PARAMETERS:</yellow></u></b>
+<b><yellow>-v</yellow></b>: Show version info.
+<b><yellow>-r</yellow></b>: Execute in recursive mode.
 
 <b><u><yellow>DESCRIPTION</yellow></u></b>
 Interpolator is a regex compliant template processor. It can be used for editing text files via key value pairs.
@@ -42,3 +52,17 @@ Another example, running:
 Note that backslash character is used for escaping purposes.
 `
 )
+
+func versionInfo() string {
+	return fmt.Sprintf(`Build Date: %s | Commit: %s
+Source: %s`, stamp_build_date, stamp_commit_hash, stamp_source)
+}
+
+func helpMessageStyled() string {
+	msg, _ := stdout_utils.ProcessStyle(helpMessage)
+	return msg
+}
+
+func helpMessageUnstyled() string {
+	return stdout_utils.RemoveStyle(helpMessage)
+}

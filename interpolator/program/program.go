@@ -3,7 +3,6 @@ package program
 import (
 	"fmt"
 	"interpolator/utils/slice_utils"
-	"interpolator/utils/stdout_utils"
 	"interpolator/utils/syntax_utils"
 	"io/ioutil"
 	"os"
@@ -17,21 +16,17 @@ func Main(args []string) {
 	if len(args) == 1 {
 		switch {
 		case args[0] == "version" || args[0] == "--version" || args[0] == "-v":
-			fmt.Printf("Build Date: %s | Commit: %s\n", Stamp_build_date, Stamp_commit_hash)
+			fmt.Println(versionInfo())
 			os.Exit(ErrSuccess)
 			return
 		case args[0] == "help" || args[0] == "--help" || args[0] == "-h":
-			msg, err := stdout_utils.ProcessStyle(HelpMessage)
-			if err != nil {
-				os.Exit(ErrInternal)
-			}
-			fmt.Printf("%s\n", msg)
+			fmt.Println(helpMessageStyled())
 			os.Exit(ErrSuccess)
 		case args[0] == "-hr":
-			fmt.Printf("%s\n", stdout_utils.RemoveStyle(HelpMessage))
+			fmt.Println(helpMessageUnstyled())
 			os.Exit(ErrSuccess)
 		default:
-			fmt.Println(HelpPrompt)
+			fmt.Println(helpPrompt)
 			os.Exit(ErrInput)
 		}
 	}
@@ -41,7 +36,7 @@ func Main(args []string) {
 
 	if len(args) < 3 {
 		fmt.Println("Define a file path, a separator and at least one key=value pair.")
-		fmt.Println(HelpPrompt)
+		fmt.Println(helpPrompt)
 		os.Exit(ErrInput)
 	}
 
