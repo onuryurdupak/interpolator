@@ -2,12 +2,12 @@ package program
 
 import (
 	"fmt"
-	"interpolator/utils/slice_utils"
-	"interpolator/utils/syntax_utils"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/onuryurdupak/gomod/slice"
+	"github.com/onuryurdupak/gomod/syntax"
 
 	"github.com/google/uuid"
 )
@@ -31,8 +31,8 @@ func Main(args []string) {
 		}
 	}
 
-	recursiveMode := slice_utils.RemoveString(&args, "-r")
-	replaceCount := syntax_utils.ConditionalInt(recursiveMode, -1, 1)
+	recursiveMode := slice.RemoveString(&args, "-r")
+	replaceCount := syntax.ConditionalInt(recursiveMode, -1, 1)
 
 	if len(args) < 3 {
 		fmt.Println("Define a file path, a separator and at least one key=value pair.")
@@ -51,7 +51,7 @@ func Main(args []string) {
 		os.Exit(ErrInput)
 	}
 
-	fileContent, err := ioutil.ReadFile(args[0])
+	fileContent, err := os.ReadFile(args[0])
 	if err != nil {
 		fmt.Printf("Error reading file at: '%s' error: '%s'.\n", args[0], err.Error())
 		os.Exit(ErrUnknown)
@@ -126,7 +126,7 @@ func Main(args []string) {
 		currentTries--
 	}
 
-	err = ioutil.WriteFile(tempFilename, []byte(fileContentStr), 0644)
+	err = os.WriteFile(tempFilename, []byte(fileContentStr), 0644)
 	if err != nil {
 		fmt.Printf("Error writing file at: '%s' error: '%s.\n", args[0], err.Error())
 		os.Exit(ErrInternal)
