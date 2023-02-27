@@ -2,12 +2,12 @@ package program
 
 import (
 	"fmt"
+	"github.com/onuryurdupak/gomod/v2/core"
+	"github.com/onuryurdupak/gomod/v2/slice"
+
 	"os"
 	"regexp"
 	"strings"
-
-	"github.com/onuryurdupak/gomod/slice"
-	"github.com/onuryurdupak/gomod/syntax"
 
 	"github.com/google/uuid"
 )
@@ -32,7 +32,7 @@ func Main(args []string) {
 	}
 
 	recursiveMode := slice.RemoveString(&args, "-r")
-	replaceCount := syntax.ConditionalInt(recursiveMode, -1, 1)
+	replaceCount := core.ConditionalInt(recursiveMode, -1, 1)
 
 	if len(args) < 3 {
 		fmt.Println("Define a file path, a separator and at least one key=value pair.")
