@@ -2,6 +2,7 @@ package program
 
 import (
 	"fmt"
+
 	"github.com/onuryurdupak/gomod/v2/core"
 	"github.com/onuryurdupak/gomod/v2/slice"
 
